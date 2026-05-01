@@ -1,0 +1,105 @@
+# 👩‍💻 SAP Project Portfolio – Subashri A
+
+## 📌 Project: Employee Lifecycle Management using SAP SuccessFactors (EC)
+
+---
+
+## 📖 Overview
+
+This project demonstrates the implementation of an **Employee Lifecycle Management System** using SAP SuccessFactors Employee Central (EC).
+It focuses on automating HR processes such as onboarding, employee data management, and workflow approvals.
+
+---
+
+## 🔄 System Workflow
+
+### 🟢 Employee Onboarding
+
+* HR creates new employee records
+* Captures personal, job, and organizational details
+
+### 🔵 Employee Data Management
+
+* Maintain and update:
+
+  * Personal information
+  * Job role & department
+  * Contact details
+
+### 🟣 Job & Position Management
+
+* Assign roles and positions
+* Manage promotions and transfers
+
+### 🟡 Leave & Approval Workflow
+
+* Employees apply for leave
+* Managers approve or reject requests
+* Automated workflow handling
+
+### 🟠 Self-Service Features
+
+**Employee Self-Service (ESS):**
+
+* Update personal details
+
+**Manager Self-Service (MSS):**
+
+* Approve requests
+* Manage team data
+
+---
+
+## ⚙️ Key Concepts
+
+* SAP SuccessFactors Employee Central (EC)
+* Role-Based Permissions (RBP)
+* Business Rules
+* Workflow Configuration
+* Employee Lifecycle Management
+
+---
+
+## 💻 SAP ABAP Knowledge (Supporting Skills)
+
+* Data Dictionary (DDIC)
+* Internal Tables & Work Areas
+* ALV Reports
+* Selection Screens
+* Modular Programming
+
+---
+
+## 🎯 Project Objective
+
+* Automate HR operations
+* Improve data accuracy
+* Reduce manual effort
+* Enhance employee experience
+
+---
+
+## 🛠️ Tech Stack
+
+* SAP ABAP
+* SAP SuccessFactors (EC - Conceptual)
+* SQL
+* HTML, CSS
+* Java (Basics)
+
+---
+
+## 📈 Future Enhancements
+
+* Payroll integration
+* Advanced analytics dashboard
+* Real-time reporting
+
+---
+
+## 👩‍💻 Author
+
+**Subashri A**
+
+
+---
