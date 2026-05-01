@@ -1,0 +1,181 @@
+CLASS zcl_employee_lifecycle DEFINITION
+  PUBLIC
+  CREATE PUBLIC.
+
+  PUBLIC SECTION.
+
+    TYPES: BEGIN OF ty_employee,
+             emp_id    TYPE i,
+             name      TYPE string,
+             dept      TYPE string,
+             leave_bal TYPE i,
+           END OF ty_employee.
+
+    TYPES: BEGIN OF ty_leave,
+             emp_id TYPE i,
+             days   TYPE i,
+             status TYPE string,
+           END OF ty_leave.
+
+    METHODS:
+      add_employee
+        IMPORTING
+          i_emp_id TYPE i
+          i_name   TYPE string
+          i_dept   TYPE string,
+
+      apply_leave
+        IMPORTING
+          i_emp_id TYPE i
+          i_days   TYPE i,
+
+      approve_leave
+        IMPORTING
+          i_emp_id TYPE i,
+
+      display_data.
+
+  PRIVATE SECTION.
+
+    DATA:
+      it_employee TYPE STANDARD TABLE OF ty_employee,
+      it_leave    TYPE STANDARD TABLE OF ty_leave.
+
+ENDCLASS.
+
+
+
+CLASS zcl_employee_lifecycle IMPLEMENTATION.
+
+*---------------------------------------------------------------------*
+* Add Employee (Onboarding)
+*---------------------------------------------------------------------*
+  METHOD add_employee.
+
+    DATA: wa_employee TYPE ty_employee.
+
+    wa_employee-emp_id = i_emp_id.
+    wa_employee-name   = i_name.
+    wa_employee-dept   = i_dept.
+    wa_employee-leave_bal = 20.
+
+    APPEND wa_employee TO it_employee.
+
+    WRITE: / 'Employee Added:', i_name.
+
+  ENDMETHOD.
+
+
+*---------------------------------------------------------------------*
+* Apply Leave
+*---------------------------------------------------------------------*
+  METHOD apply_leave.
+
+    DATA: wa_employee TYPE ty_employee,
+          wa_leave    TYPE ty_leave.
+
+    READ TABLE it_employee INTO wa_employee WITH KEY emp_id = i_emp_id.
+
+    IF sy-subrc = 0.
+      IF wa_employee-leave_bal >= i_days.
+
+        wa_leave-emp_id = i_emp_id.
+        wa_leave-days   = i_days.
+        wa_leave-status = 'Pending'.
+
+        APPEND wa_leave TO it_leave.
+
+        WRITE: / 'Leave Request Submitted'.
+
+      ELSE.
+        WRITE: / 'Insufficient Leave Balance'.
+      ENDIF.
+    ELSE.
+      WRITE: / 'Employee Not Found'.
+    ENDIF.
+
+  ENDMETHOD.
+
+
+*---------------------------------------------------------------------*
+* Approve Leave
+*---------------------------------------------------------------------*
+  METHOD approve_leave.
+
+    DATA: wa_leave    TYPE ty_leave,
+          wa_employee TYPE ty_employee.
+
+    LOOP AT it_leave INTO wa_leave WHERE emp_id = i_emp_id AND status = 'Pending'.
+
+      wa_leave-status = 'Approved'.
+      MODIFY it_leave FROM wa_leave.
+
+      READ TABLE it_employee INTO wa_employee WITH KEY emp_id = i_emp_id.
+      wa_employee-leave_bal = wa_employee-leave_bal - wa_leave-days.
+      MODIFY it_employee FROM wa_employee.
+
+      WRITE: / 'Leave Approved for Employee:', i_emp_id.
+
+    ENDLOOP.
+
+  ENDMETHOD.
+
+
+*---------------------------------------------------------------------*
+* Display Data
+*---------------------------------------------------------------------*
+  METHOD display_data.
+
+    DATA: wa_employee TYPE ty_employee,
+          wa_leave    TYPE ty_leave.
+
+    WRITE: / '--- Employee Data ---'.
+
+    LOOP AT it_employee INTO wa_employee.
+      WRITE: / wa_employee-emp_id,
+               wa_employee-name,
+               wa_employee-dept,
+               wa_employee-leave_bal.
+    ENDLOOP.
+
+    WRITE: / '--- Leave Requests ---'.
+
+    LOOP AT it_leave INTO wa_leave.
+      WRITE: / wa_leave-emp_id,
+               wa_leave-days,
+               wa_leave-status.
+    ENDLOOP.
+
+  ENDMETHOD.
+
+ENDCLASS.
+
+
+
+*---------------------------------------------------------------------*
+* Report to Execute Class
+*---------------------------------------------------------------------*
+REPORT z_employee_lifecycle_class.
+
+DATA: lo_emp TYPE REF TO zcl_employee_lifecycle.
+
+START-OF-SELECTION.
+
+  CREATE OBJECT lo_emp.
+
+  lo_emp->add_employee(
+    i_emp_id = 101
+    i_name   = 'Subashri'
+    i_dept   = 'IT'
+  ).
+
+  lo_emp->apply_leave(
+    i_emp_id = 101
+    i_days   = 5
+  ).
+
+  lo_emp->approve_leave(
+    i_emp_id = 101
+  ).
+
+  lo_emp->display_data( ).
